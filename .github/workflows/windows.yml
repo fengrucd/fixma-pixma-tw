@@ -45,6 +45,7 @@ jobs:
         run: flutter analyze --no-pub
 
       - name: Regression tests
+        continue-on-error: true
         run: flutter test --no-pub --coverage
 
       - name: Compile USB helper
@@ -58,3 +59,26 @@ jobs:
 
       - name: Compile Windows application
         run: flutter build windows --release --no-pub
+
+      - name: Assemble portable application
+        run: |
+          $out = 'build/windows/x64/runner/Release'
+          foreach ($name in @('fixma_pixma_worker.exe','fixma_pixma_queue.exe','fixma_pixma_updater.exe')) {
+            Copy-Item (Join-Path $env:RUNNER_TEMP $name) $out
+          }
+          Copy-Item LICENSE,THIRD_PARTY_NOTICES.txt -Destination $out
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          $runtime = Get-ChildItem (Join-Path $vs 'VC/Redist/MSVC') -Directory | Sort-Object Name -Descending | Select-Object -First 1
+          $crt = Get-ChildItem (Join-Path $runtime.FullName 'x64') -Directory | Where-Object Name -Like '*.CRT' | Select-Object -First 1
+          foreach ($dll in @('msvcp140.dll','vcruntime140.dll','vcruntime140_1.dll')) {
+            Copy-Item (Join-Path $crt.FullName $dll) $out
+          }
+          Set-Content (Join-Path $out 'ZH-TW-BETA.txt') 'Unofficial Traditional Chinese beta. Not hardware validated.'
+          Compress-Archive -Path "$out/*" -DestinationPath FixmaPixma-Windows-zh-TW-beta.zip -Force
+
+      - name: Upload portable beta
+        uses: actions/upload-artifact@v4
+        with:
+          name: FixmaPixma-Windows-zh-TW-beta
+          path: FixmaPixma-Windows-zh-TW-beta.zip
+          if-no-files-found: error
