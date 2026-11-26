@@ -68,8 +68,8 @@ jobs:
           }
           Copy-Item LICENSE,THIRD_PARTY_NOTICES.txt -Destination $out
           $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
-          $runtime = Get-ChildItem (Join-Path $vs 'VC/Redist/MSVC') -Directory | Sort-Object Name -Descending | Select-Object -First 1
-          $crt = Get-ChildItem (Join-Path $runtime.FullName 'x64') -Directory | Where-Object Name -Like '*.CRT' | Select-Object -First 1
+          $crt = Get-ChildItem (Join-Path $vs 'VC/Redist/MSVC') -Directory -Recurse | Where-Object { $_.Name -like '*.CRT' -and $_.Parent.Name -eq 'x64' -and (Test-Path (Join-Path $_.FullName 'msvcp140.dll')) } | Select-Object -First 1
+          if (-not $crt) { throw 'Visual C++ x64 runtime not found' }
           foreach ($dll in @('msvcp140.dll','vcruntime140.dll','vcruntime140_1.dll')) {
             Copy-Item (Join-Path $crt.FullName $dll) $out
           }
