@@ -51,7 +51,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
           children: [
             const Expanded(
               child: Text(
-                'Diagnostics',
+                '診斷',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
               ),
             ),
@@ -70,10 +70,10 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
           runSpacing: 8,
           children: [
             for (final (i, label) in [
-              'Connection',
-              'Repair follow-ups',
-              'Compare reports',
-              'Model support',
+              '連線',
+              '維修追蹤',
+              '比較報告',
+              '機型支援',
             ].indexed)
               ChoiceChip(
                 label: Text(label),
@@ -98,10 +98,10 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionLabel('Connection checks'),
+            const SectionLabel('連線檢查'),
             const SizedBox(height: 8),
             const Text(
-              'Reads USB interfaces, network status, and the visible printer queue. Nothing is printed, cleaned, or reset.',
+              '讀取 USB 介面、網路狀態及可見的列印佇列。不會執行列印、清潔或歸零。',
               style: TextStyle(height: 1.6),
             ),
             const SizedBox(height: 16),
@@ -114,21 +114,21 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
                       ? null
                       : c.checkConnections,
                   icon: const Icon(Icons.manage_search, size: 18),
-                  label: const Text('Run connection checks'),
+                  label: const Text('執行連線檢查'),
                 ),
                 OutlinedButton(
                   onPressed: c.busy ? null : c.rememberUsbBaseline,
-                  child: const Text('Remember USB baseline'),
+                  child: const Text('儲存 USB 基準資料'),
                 ),
                 TextButton(
                   onPressed: widget.serviceGuide,
-                  child: const Text('G7020 service mode guide'),
+                  child: const Text('G7020 維修模式指南'),
                 ),
                 TextButton(
                   onPressed: c.connectionChecks.isEmpty || c.busy
                       ? null
                       : () => exportSummary(context),
-                  child: const Text('Export diagnostic summary'),
+                  child: const Text('匯出診斷摘要'),
                 ),
               ],
             ),
@@ -213,7 +213,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionLabel('Detected Canon USB interfaces'),
+              const SectionLabel('已偵測到的 Canon USB 介面'),
               const SizedBox(height: 10),
               for (final d in c.devices)
                 Padding(
@@ -235,11 +235,11 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
             onPressed: c.busy || c.diagnosticIdentity == null
                 ? null
                 : c.trackDeviceIssue,
-            child: const Text('Track current printer issue'),
+            child: const Text('追蹤目前印表機問題'),
           ),
           TextButton(
             onPressed: () => inspect(context),
-            child: const Text('Inspect captured reply offline'),
+            child: const Text('離線檢查擷取的回應'),
           ),
         ],
       ),
@@ -280,8 +280,8 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
           children: [
             Text(
               r.kind == 'deviceIssue'
-                  ? 'Printer issue follow-up'
-                  : 'Waste-counter repair',
+                  ? '印表機問題追蹤'
+                  : '廢墨計數器維修',
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
             BadgeLabel(r.stage, warning: !r.verified),
@@ -317,8 +317,8 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
               onPressed: c.busy ? null : () => confirmRestart(context, r),
               child: Text(
                 r.restartConfirmed
-                    ? 'Confirm another restart'
-                    : 'I restarted with Power',
+                    ? '確認再次重新開機'
+                    : '我已使用電源鍵重新開機',
               ),
             ),
             FilledButton(
@@ -329,7 +329,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
                       c.selectedPrinter == null
                   ? null
                   : () => c.checkRepair(r),
-              child: const Text('Read status after restart'),
+              child: const Text('讀取重新開機後的狀態'),
             ),
           ],
         ),
@@ -339,7 +339,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
             contentPadding: EdgeInsets.zero,
             controlAffinity: ListTileControlAffinity.leading,
             title: const Text(
-              'I checked the printer display and it is clear',
+              '我已確認印表機螢幕無錯誤',
               style: TextStyle(fontSize: 14),
             ),
             value: r.displayClear,
@@ -361,18 +361,18 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
     final answer = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Confirm normal restart'),
+        title: const Text('確認正常重新開機'),
         content: const Text(
           'Confirm that you turned this printer off with its Power button, waited for shutdown to finish, then turned it on normally. This records your confirmation; it does not restart the printer.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
+            child: const Text('取消'),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Restart completed'),
+            child: const Text('重新開機已完成'),
           ),
         ],
       ),
@@ -403,7 +403,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SectionLabel('Compare service reports'),
+              const SectionLabel('比較維修報告'),
               const SizedBox(height: 8),
               const Text(
                 'Choose two reports from the same printer. Changes describe reported values; stored error history does not mean a fault is currently active.',
@@ -414,13 +414,13 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
                 builder: (context, size) {
                   final fields = [
                     reportPicker(
-                      'Baseline',
+                      '基準',
                       a,
                       all,
                       (v) => setState(() => baseline = v),
                     ),
                     reportPicker(
-                      'Compare with',
+                      '比較對象',
                       b,
                       all,
                       (v) => setState(() => comparison = v),
@@ -447,7 +447,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
               TextButton.icon(
                 onPressed: c.busy ? null : () => importDialog(context),
                 icon: const Icon(Icons.input, size: 17),
-                label: const Text('Import saved report text or JSON'),
+                label: const Text('匯入已儲存的報告文字或 JSON'),
               ),
               Text(
                 '${all.length} report(s) available. Imports are kept locally for comparison and cannot enable reset.',
@@ -473,10 +473,10 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
               child: DataTable(
                 columns: [
                   for (final label in [
-                    'Reported field',
-                    'Baseline',
-                    'Comparison',
-                    'Change',
+                    '回報欄位',
+                    '基準',
+                    '比較值',
+                    '變化',
                   ])
                     DataColumn(label: Text(label)),
                 ],
@@ -496,7 +496,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
           ),
           const SizedBox(height: 8),
           Text(
-            'A lower waste estimate is not proof that the absorber was physically serviced.',
+            '廢墨估算值降低並不能證明吸收棉已實際維護。',
             style: TextStyle(color: colors(context).muted),
           ),
         ],
@@ -515,7 +515,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
     isExpanded: true,
     decoration: InputDecoration(labelText: label, isDense: true),
     items: [
-      const DropdownMenuItem(value: '', child: Text('Choose report')),
+      const DropdownMenuItem(value: '', child: Text('選擇報告')),
       for (final r in all)
         DropdownMenuItem(
           value: keyOf(r),
@@ -535,7 +535,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, update) => AlertDialog(
-          title: const Text('Import comparison report'),
+          title: const Text('匯入比較報告'),
           content: SizedBox(
             width: 650,
             child: Column(
@@ -552,7 +552,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
                   maxLines: 10,
                   maxLength: 2 * 1024 * 1024,
                   decoration: const InputDecoration(
-                    labelText: 'Report text or JSON',
+                    labelText: '報告文字或 JSON',
                     counterText: '',
                   ),
                 ),
@@ -570,7 +570,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel'),
+              child: const Text('取消'),
             ),
             FilledButton(
               onPressed: () {
@@ -581,7 +581,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
                   update(() => error = CareController.cleanError(e));
                 }
               },
-              child: const Text('Import for comparison'),
+              child: const Text('匯入以供比較'),
             ),
           ],
         ),
@@ -619,8 +619,8 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
                     ),
                     BadgeLabel(
                       profile.verified
-                          ? 'Verified device profile'
-                          : 'Research candidate',
+                          ? '已驗證裝置設定檔'
+                          : '研究候選機型',
                       warning: !profile.verified,
                     ),
                   ],
@@ -695,7 +695,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, update) => AlertDialog(
-          title: const Text('Inspect captured reply offline'),
+          title: const Text('離線檢查擷取的回應'),
           content: SizedBox(
             width: 680,
             child: SingleChildScrollView(
@@ -713,7 +713,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
                     maxLines: 9,
                     maxLength: 256 * 1024,
                     decoration: const InputDecoration(
-                      labelText: 'Capture JSON',
+                      labelText: '擷取資料 JSON',
                       hintText: '{"keyword":"010203","opcode":21,"frames":["40 hex digits"]}',
                       counterText: '',
                     ),
@@ -736,7 +736,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Close'),
+              child: const Text('關閉'),
             ),
             FilledButton(
               onPressed: () {
@@ -749,7 +749,7 @@ class _DiagnosticsViewState extends State<DiagnosticsView> {
                   }
                 });
               },
-              child: const Text('Decode offline'),
+              child: const Text('離線解碼'),
             ),
           ],
         ),

@@ -26,7 +26,7 @@ class CanonMaintenancePanel extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      valid ? check.identity.model : 'Canon printer controls',
+                      valid ? check.identity.model : 'Canon 印表機控制',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -45,7 +45,7 @@ class CanonMaintenancePanel extends StatelessWidget {
                     ),
                     if (!c.networkOnline)
                       Text(
-                        'Select an online printer in Overview.',
+                        '請在總覽選擇已連線的印表機。',
                         style: TextStyle(
                           color: p.muted,
                           fontSize: 13,
@@ -60,7 +60,7 @@ class CanonMaintenancePanel extends StatelessWidget {
                 onPressed: c.canReadCanonControls
                     ? () => printerAction(
                         context,
-                        title: 'Could not read printer controls',
+                        title: '無法讀取印表機控制資訊',
                         action: c.loadCanonControls,
                         error: () => c.lastError,
                         help: networkRequirement,
@@ -68,7 +68,7 @@ class CanonMaintenancePanel extends StatelessWidget {
                     : null,
                 icon: const Icon(Icons.refresh, size: 17),
                 label: Text(
-                  valid ? 'Reload controls' : 'Read printer controls',
+                  valid ? '重新讀取控制資訊' : '讀取印表機控制資訊',
                 ),
               ),
             ],
@@ -82,32 +82,32 @@ class CanonMaintenancePanel extends StatelessWidget {
               _taskRow(
                 context,
                 CanonTask.nozzleCheck,
-                'Print one sheet to inspect the black grid and color bands.',
-                'Print nozzle check',
+                '列印一張紙以檢查黑色網格與彩色條紋。',
+                '列印噴嘴檢查圖',
                 enabled,
               ),
               Divider(height: 1, color: p.line),
               _taskRow(
                 context,
                 CanonTask.cleaning,
-                'Run a standard cleaning cycle for all colors. Uses ink; run only when needed.',
-                'Clean printhead',
+                '對所有顏色執行標準清潔。會消耗墨水，僅在必要時執行。',
+                '清潔噴頭',
                 enabled,
               ),
               Divider(height: 1, color: p.line),
               _taskRow(
                 context,
                 CanonTask.alignmentCheck,
-                'Print the current alignment values on one sheet.',
-                'Print alignment check',
+                '列印一張目前校正值的檢查圖。',
+                '列印校正檢查圖',
                 enabled,
               ),
               Divider(height: 1, color: p.line),
               _taskRow(
                 context,
                 CanonTask.automaticAlignment,
-                'Print two sheets and let the printer adjust alignment automatically. Takes about 4 to 5 minutes.',
-                'Align printhead',
+                '列印兩張紙並讓印表機自動校正，約需 4 至 5 分鐘。',
+                '噴頭校正',
                 enabled,
               ),
             ],
@@ -119,7 +119,7 @@ class CanonMaintenancePanel extends StatelessWidget {
           style: TextStyle(color: p.muted, fontSize: 13, height: 1.5),
         ),
         const SizedBox(height: 24),
-        const SectionLabel('Printer settings'),
+        const SectionLabel('印表機設定'),
         const SizedBox(height: 10),
         if (!valid)
           Panel(
@@ -258,7 +258,7 @@ class _TaskDialogState extends State<_TaskDialog> {
                 DropdownButtonFormField<String>(
                   initialValue: paper,
                   decoration: const InputDecoration(
-                    labelText: 'Paper in the cassette',
+                    labelText: '紙匣內的紙張',
                   ),
                   items: const [
                     DropdownMenuItem(value: letterPaper, child: Text('Letter')),
@@ -291,16 +291,16 @@ class _TaskDialogState extends State<_TaskDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: const Text('取消'),
         ),
         FilledButton(
           onPressed: ready ? () => Navigator.pop(context, paper) : null,
           child: Text(
             task == CanonTask.automaticAlignment
-                ? 'Start alignment'
+                ? '開始校正'
                 : task.usesPaper
-                ? 'Print check'
-                : 'Start cleaning',
+                ? '列印檢查圖'
+                : '開始清潔',
           ),
         ),
       ],
@@ -332,12 +332,12 @@ class _CanonSettingRowState extends State<_CanonSettingRow> {
         allowed = CanonSettings.allowed[key]!;
     selected ??= widget.value;
     final notes = {
-      'quiet': 'Reduce operating noise. Printing may be slower.',
-      'autoPowerOn': 'Wake the printer when a print job arrives.',
+      'quiet': '降低運作噪音，列印速度可能變慢。',
+      'autoPowerOn': '收到列印工作時喚醒印表機。',
       'autoPowerOff':
-          'Turn off after inactivity. Fax use may keep the printer on.',
-      'paperGap': 'Increase printhead clearance if paper rubs or smears.',
-      'dryLevel': 'Allow more time for ink to dry between pages.',
+          '閒置後自動關機，使用傳真時可能保持開機。',
+      'paperGap': '紙張摩擦或出現墨漬時，增加噴頭間隙。',
+      'dryLevel': '增加頁面間的墨水乾燥時間。',
     };
     final editor = Row(
       mainAxisSize: MainAxisSize.min,
@@ -387,7 +387,7 @@ class _CanonSettingRowState extends State<_CanonSettingRow> {
                   selected != widget.value
               ? () => printerAction(
                   context,
-                  title: 'Could not save printer setting',
+                  title: '無法儲存印表機設定',
                   action: () =>
                       widget.controller.saveCanonSetting(key, selected!),
                   error: () => widget.controller.lastError,
@@ -395,7 +395,7 @@ class _CanonSettingRowState extends State<_CanonSettingRow> {
                   mayHaveSentCommand: true,
                 )
               : null,
-          child: const Text('Apply'),
+          child: const Text('套用'),
         ),
       ],
     );

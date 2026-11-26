@@ -25,7 +25,7 @@ class PrinterOverview extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Printer overview',
+          '印表機總覽',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w600,
@@ -34,7 +34,7 @@ class PrinterOverview extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'Device information, estimated ink, and current printer status.',
+          '裝置資訊、預估墨量及目前印表機狀態。',
           style: TextStyle(fontSize: 14, color: p.muted, height: 1.6),
         ),
         const SizedBox(height: 18),
@@ -49,7 +49,7 @@ class PrinterOverview extends StatelessWidget {
                     Text(
                       status?.model ??
                           c.selectedPrinter?.discoveredName.nonEmpty ??
-                          'Find your printer',
+                          '尋找你的印表機',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -58,7 +58,7 @@ class PrinterOverview extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       c.selectedPrinter?.uri.host ??
-                          'Automatic discovery on your local network',
+                          '自動搜尋區域網路中的裝置',
                       style: TextStyle(fontSize: 13, color: p.muted),
                     ),
                   ],
@@ -66,7 +66,7 @@ class PrinterOverview extends StatelessWidget {
               ),
               if (c.networkPrinters.length > 1)
                 PopupMenuButton<PrinterTarget>(
-                  tooltip: 'Choose printer',
+                  tooltip: '選擇印表機',
                   onSelected: locked
                       ? null
                       : (target) => networkAction(
@@ -90,7 +90,7 @@ class PrinterOverview extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: locked ? null : () => findNetworkPrinter(context),
                 icon: const Icon(Icons.search, size: 17),
-                label: const Text('Find printers'),
+                label: const Text('搜尋印表機'),
               ),
               const SizedBox(width: 10),
               FilledButton.icon(
@@ -99,7 +99,7 @@ class PrinterOverview extends StatelessWidget {
                     : () => networkAction(context, c.refreshNetwork),
                 icon: const Icon(Icons.refresh, size: 17),
                 label: Text(
-                  c.networkRefreshing ? 'Refreshing…' : 'Refresh now',
+                  c.networkRefreshing ? '更新中…' : '立即更新',
                 ),
               ),
             ],
@@ -112,18 +112,18 @@ class PrinterOverview extends StatelessWidget {
               TextButton.icon(
                 onPressed: locked ? null : () => addAddress(context),
                 icon: const Icon(Icons.add, size: 16),
-                label: const Text('Add by address'),
+                label: const Text('依位址新增'),
               ),
               const Spacer(),
               Text(
-                'Auto refresh · 15 seconds',
+                '自動更新・15 秒',
                 style: TextStyle(fontSize: 12, color: p.muted),
               ),
               const SizedBox(width: 8),
               SizedBox(
                 height: 32,
                 child: Semantics(
-                  label: 'Automatic status refresh',
+                  label: '自動更新狀態',
                   child: Switch(
                     value: c.autoRefresh,
                     onChanged: c.setAutoRefresh,
@@ -150,12 +150,12 @@ class PrinterOverview extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SectionLabel('USB service diagnostics'),
+                        const SectionLabel('USB 維修診斷'),
                         const SizedBox(height: 8),
                         Text(
                           c.devices.any((d) => d['service'] == true)
-                              ? 'A Canon service-mode USB interface is connected.'
-                              : 'Waste-counter readings and resets require USB + manual service mode on the verified G7020. They are not available over Wi-Fi.',
+                              ? '已連接 Canon 維修模式 USB 介面。'
+                              : '已驗證的 G7020 需使用 USB 並手動進入維修模式才能讀取及歸零廢墨計數器，不支援 Wi-Fi 操作。',
                           style: TextStyle(
                             color: p.muted,
                             fontSize: 13,
@@ -165,7 +165,7 @@ class PrinterOverview extends StatelessWidget {
                         const SizedBox(height: 8),
                         TextButton(
                           onPressed: openService,
-                          child: const Text('Open service report'),
+                          child: const Text('開啟維修報告'),
                         ),
                       ],
                     ),
@@ -196,21 +196,21 @@ class PrinterOverview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionLabel('Device information'),
+          const SectionLabel('裝置資訊'),
           const SizedBox(height: 16),
           for (final (name, value) in [
-            ('Printer name', s?.name ?? 'Not read'),
-            ('Reported model', s?.model ?? 'Not read'),
-            ('Firmware', s?.firmware ?? 'Not read'),
-            ('Serial number', s?.serial ?? 'Not reported'),
-            ('Network address', c.selectedPrinter?.uri.host ?? 'Not connected'),
+            ('印表機名稱', s?.name ?? '尚未讀取'),
+            ('回報機型', s?.model ?? '尚未讀取'),
+            ('韌體', s?.firmware ?? '尚未讀取'),
+            ('序號', s?.serial ?? '未回報'),
+            ('網路位址', c.selectedPrinter?.uri.host ?? '尚未連線'),
             (
-              'Connection',
+              '連線',
               c.networkOnline
-                  ? 'Local network'
+                  ? '區域網路'
                   : s != null
-                  ? 'Offline · last reading'
-                  : 'Not connected',
+                  ? '離線・上次讀取值'
+                  : '尚未連線',
             ),
             if (s?.canon?.signal != null)
               ('Wi-Fi signal', '${s!.canon!.signal}%'),
@@ -226,7 +226,7 @@ class PrinterOverview extends StatelessWidget {
           Divider(height: 1, color: p.line),
           const SizedBox(height: 10),
           Text(
-            'Names and firmware are read from the printer.',
+            '名稱與韌體資訊由印表機讀取。',
             style: TextStyle(fontSize: 12, height: 1.5, color: p.muted),
           ),
         ],
@@ -242,13 +242,13 @@ class PrinterOverview extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(child: SectionLabel('Current status')),
+              const Expanded(child: SectionLabel('目前狀態')),
               BadgeLabel(
                 s == null
-                    ? 'Not connected'
+                    ? '尚未連線'
                     : online
                     ? s.stateLabel
-                    : 'Offline',
+                    : '離線',
                 warning: s != null && (!online || s.issues.isNotEmpty),
               ),
             ],
@@ -263,20 +263,20 @@ class PrinterOverview extends StatelessWidget {
           ],
           if (s == null)
             Text(
-              c.busy ? 'Looking for printers on this network…' : 'No network printer connected. Check that it is on the same network, or add its address.',
+              c.busy ? '正在搜尋此網路上的印表機…' : '未連接網路印表機。請確認位於同一網路，或手動新增位址。',
               style: TextStyle(fontSize: 14, color: p.muted, height: 1.5),
             )
           else ...[
             if (!online)
               Text(
-                'The information below is from the last successful check.',
+                '以下資訊來自上次成功檢查。',
                 style: TextStyle(fontSize: 13, color: p.muted),
               ),
             if (s.issues.isEmpty)
               Text(
                 online && s.state != null
-                    ? 'No current errors reported.'
-                    : 'No errors were reported at the last check.',
+                    ? '目前未回報錯誤。'
+                    : '上次檢查未回報錯誤。',
                 style: TextStyle(fontSize: 14, color: p.ink),
               )
             else
@@ -338,7 +338,7 @@ class PrinterOverview extends StatelessWidget {
             children: [
               Expanded(
                 child: SectionLabel(
-                  ink ? 'Printer ink estimates' : 'Estimated supplies',
+                  ink ? '印表機預估墨量' : '預估耗材量',
                 ),
               ),
               if (s?.model.toLowerCase().contains('canon g7000') == true &&
@@ -347,7 +347,7 @@ class PrinterOverview extends StatelessWidget {
                   onPressed: c.canCheckInkReset
                       ? () => resetRefilledInk(context)
                       : null,
-                  child: const Text('Reset ink counts'),
+                  child: const Text('重設墨量計數器'),
                 ),
             ],
           ),
@@ -357,8 +357,8 @@ class PrinterOverview extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 12),
               child: Text(
                 s == null
-                    ? 'Ink estimates appear after connecting to a supported printer.'
-                    : 'This printer does not report individual supply levels.',
+                    ? '連接支援的印表機後會顯示預估墨量。'
+                    : '此印表機未回報個別耗材用量。',
                 style: TextStyle(color: p.muted, fontSize: 14, height: 1.5),
               ),
             )
@@ -421,19 +421,19 @@ class PrinterOverview extends StatelessWidget {
           Divider(height: 1, color: p.line),
           const SizedBox(height: 10),
           Text(
-            'These are the printer’s stored estimates, not a measurement of ink in the tanks. Refilling may not update them. Check the tanks visually.',
+            '這些是印表機儲存的估算值，並非墨水槽實際墨量。補墨後可能不會更新，請目視確認墨水槽。',
             style: TextStyle(fontSize: 12.5, color: p.muted, height: 1.5),
           ),
           if (ink && s != null)
             TextButton(
               onPressed: () => refillHelp(context, s),
-              child: const Text('Recently refilled?'),
+              child: const Text('最近有補墨嗎？'),
             ),
           if (s != null && !c.networkOnline)
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(
-                'Offline - showing the last reported levels.',
+                '離線：顯示上次回報的墨量。',
                 style: TextStyle(fontSize: 12.5, color: p.warning),
               ),
             ),
@@ -446,7 +446,7 @@ class PrinterOverview extends StatelessWidget {
     InkResetCheck? check;
     final ready = await printerAction(
       context,
-      title: 'Could not check remaining-ink counts',
+      title: '無法檢查剩餘墨量計數',
       action: () async {
         check = await c.prepareInkReset();
       },
@@ -463,7 +463,7 @@ class PrinterOverview extends StatelessWidget {
     if (selected == null || !context.mounted) return;
     await printerAction(
       context,
-      title: 'Remaining-ink reset did not complete',
+      title: '剩餘墨量計數重設未完成',
       action: () => c.resetInkCounts(fresh, selected, filledToUpperLine: true),
       error: () => c.lastError,
       help: networkRequirement,
@@ -477,7 +477,7 @@ class PrinterOverview extends StatelessWidget {
   ) async {
     await printerAction(
       context,
-      title: 'Could not connect to the network printer',
+      title: '無法連接網路印表機',
       action: action,
       error: () => c.networkError,
       help: networkRequirement,
@@ -487,7 +487,7 @@ class PrinterOverview extends StatelessWidget {
   Future<void> findNetworkPrinter(BuildContext context) async {
     await printerAction(
       context,
-      title: 'No reachable network printer found',
+      title: '找不到可連線的網路印表機',
       action: c.discover,
       error: () => c.networkError.isNotEmpty
           ? c.networkError
@@ -502,7 +502,7 @@ class PrinterOverview extends StatelessWidget {
       showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('After an ink refill'),
+          title: const Text('補墨後的操作'),
           content: SizedBox(
             width: 490,
             child: SingleChildScrollView(
@@ -558,7 +558,7 @@ class PrinterOverview extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: const Text('關閉'),
             ),
           ],
         ),
@@ -572,31 +572,31 @@ class PrinterOverview extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(child: SectionLabel('Reported capabilities')),
+              const Expanded(child: SectionLabel('回報的功能')),
               TextButton.icon(
                 onPressed: c.busy || !c.networkOnline
                     ? null
                     : c.saveNetworkSnapshot,
                 icon: const Icon(Icons.save_alt, size: 16),
-                label: const Text('Save snapshot'),
+                label: const Text('儲存快照'),
               ),
             ],
           ),
           const SizedBox(height: 4),
           property(
             context,
-            'Two-sided printing',
+            '雙面列印',
             s.duplex
-                ? 'Supported'
+                ? '支援'
                 : s.texts('sides-supported').isEmpty
-                ? 'Not reported'
-                : 'Not advertised',
+                ? '未回報'
+                : '未宣告',
           ),
           property(
             context,
-            'Paper sizes',
+            '紙張尺寸',
             s.texts('media-supported').isEmpty
-                ? 'Not reported'
+                ? '未回報'
                 : '${s.texts('media-supported').length} advertised sizes',
           ),
           const SizedBox(height: 8),
@@ -604,7 +604,7 @@ class PrinterOverview extends StatelessWidget {
             onPressed: () => showDialog<void>(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: const Text('Printer details'),
+                title: const Text('印表機詳細資訊'),
                 content: SizedBox(
                   width: 640,
                   height: 420,
@@ -622,12 +622,12 @@ class PrinterOverview extends StatelessWidget {
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(ctx),
-                    child: const Text('Close'),
+                    child: const Text('關閉'),
                   ),
                 ],
               ),
             ),
-            child: const Text('View all reported details'),
+            child: const Text('查看所有回報資訊'),
           ),
           Text(
             'Manage stuck jobs in Queues and run printer check patterns in Maintenance.',
@@ -670,7 +670,7 @@ class PrinterOverview extends StatelessWidget {
     final address = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Connect to a printer'),
+        title: const Text('連接印表機'),
         content: SizedBox(
           width: 440,
           child: Column(
@@ -686,7 +686,7 @@ class PrinterOverview extends StatelessWidget {
                 controller: input,
                 autofocus: true,
                 decoration: const InputDecoration(
-                  labelText: 'IP address or printer hostname',
+                  labelText: 'IP 位址或印表機主機名稱',
                   hintText: '192.168.1.50 or ipp://printer.local/ipp/print',
                 ),
                 onSubmitted: (v) => Navigator.pop(ctx, v),
@@ -697,11 +697,11 @@ class PrinterOverview extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: const Text('取消'),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, input.text),
-            child: const Text('Connect'),
+            child: const Text('連線'),
           ),
         ],
       ),
@@ -735,7 +735,7 @@ class _InkRefillDialogState extends State<_InkRefillDialog> {
         )
         .toSet();
     return AlertDialog(
-      title: const Text('Reset remaining-ink counts'),
+      title: const Text('重設剩餘墨量計數'),
       content: SizedBox(
         width: 460,
         child: SingleChildScrollView(
@@ -762,8 +762,8 @@ class _InkRefillDialogState extends State<_InkRefillDialog> {
                   }),
                   child: Text(
                     selected.containsAll(available)
-                        ? 'Clear selection'
-                        : 'Select all refilled colors',
+                        ? '清除選取'
+                        : '選取所有已補墨顏色',
                   ),
                 ),
               for (final entry in inkNames.entries)
@@ -773,9 +773,9 @@ class _InkRefillDialogState extends State<_InkRefillDialog> {
                   title: Text(entry.value),
                   subtitle: Text(
                     widget.check.counters.levels[entry.key] == 100
-                        ? 'Already reports full'
+                        ? '已回報滿量'
                         : widget.check.counters.levels[entry.key] == null
-                        ? 'Count not reported'
+                        ? '未回報計數值'
                         : 'Stored estimate: ${widget.check.counters.levels[entry.key]}%',
                   ),
                   value: selected.contains(entry.key),
@@ -796,7 +796,7 @@ class _InkRefillDialogState extends State<_InkRefillDialog> {
                 value: filled,
                 onChanged: (value) => setState(() => filled = value == true),
                 title: const Text(
-                  'The selected tanks are filled to the upper line.',
+                  '已選取的墨水槽均已補至上限刻度。',
                 ),
               ),
               const SizedBox(height: 8),
@@ -815,13 +815,13 @@ class _InkRefillDialogState extends State<_InkRefillDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: const Text('取消'),
         ),
         FilledButton(
           onPressed: filled && selected.isNotEmpty
               ? () => Navigator.pop(context, {...selected})
               : null,
-          child: const Text('Reset selected counts'),
+          child: const Text('重設所選計數器'),
         ),
       ],
     );

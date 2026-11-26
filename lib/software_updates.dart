@@ -44,10 +44,10 @@ class UpdateNotice extends StatelessWidget {
           TextButton(
             onPressed: () =>
                 showSoftwareUpdates(context, updates, check: false),
-            child: const Text('View update'),
+            child: const Text('查看更新'),
           ),
           IconButton(
-            tooltip: 'Dismiss update notice',
+            tooltip: '關閉更新通知',
             onPressed: updates.dismissNotice,
             icon: const Icon(Icons.close, size: 18),
           ),
@@ -100,7 +100,7 @@ class _UpdatesDialogState extends State<_UpdatesDialog> {
         canPop: !u.installing,
         child: AlertDialog(
           scrollable: true,
-          title: const Text('Software updates'),
+          title: const Text('軟體更新'),
           content: SizedBox(
             width: 480,
             child: Column(
@@ -111,14 +111,14 @@ class _UpdatesDialogState extends State<_UpdatesDialog> {
                 const SizedBox(height: 16),
                 Text(
                   u.checking
-                      ? 'Checking GitHub for updates...'
+                      ? '正在 GitHub 檢查更新…'
                       : u.error.isNotEmpty
                       ? u.error
                       : release != null
                       ? 'Version ${release.version.text} is available.'
                       : u.completed
-                      ? 'No newer Windows release was found.'
-                      : 'Check GitHub for a newer Windows release.',
+                      ? '未找到較新的 Windows 版本。'
+                      : '在 GitHub 檢查較新的 Windows 版本。',
                 ),
                 if (ReleaseVersion.tryParse(u.installed)?.isPrerelease ==
                     true) ...[
@@ -132,7 +132,7 @@ class _UpdatesDialogState extends State<_UpdatesDialog> {
                 CheckboxListTile(
                   contentPadding: EdgeInsets.zero,
                   controlAffinity: ListTileControlAffinity.leading,
-                  title: const Text('Check automatically once a day'),
+                  title: const Text('每天自動檢查一次'),
                   value: u.automatic,
                   onChanged: (v) => u.setAutomatic(v ?? false),
                 ),
@@ -164,7 +164,7 @@ class _UpdatesDialogState extends State<_UpdatesDialog> {
                     ),
                     TextButton(
                       onPressed: u.cancelDownload,
-                      child: const Text('Cancel download'),
+                      child: const Text('取消下載'),
                     ),
                   ],
                 ],
@@ -192,13 +192,13 @@ class _UpdatesDialogState extends State<_UpdatesDialog> {
           actions: [
             TextButton(
               onPressed: u.installing ? null : () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: const Text('關閉'),
             ),
             TextButton(
               onPressed: u.checking || u.downloading || u.installing
                   ? null
                   : () => u.check(),
-              child: Text(u.checking ? 'Checking...' : 'Check for updates'),
+              child: Text(u.checking ? '檢查中…' : '檢查更新'),
             ),
             if (release != null && release.canDownload && u.prepared == null)
               FilledButton.icon(
@@ -206,7 +206,7 @@ class _UpdatesDialogState extends State<_UpdatesDialog> {
                     ? null
                     : u.download,
                 icon: const Icon(Icons.download, size: 16),
-                label: const Text('Download update'),
+                label: const Text('下載更新'),
               ),
             if (u.prepared != null)
               FilledButton.icon(
@@ -215,18 +215,18 @@ class _UpdatesDialogState extends State<_UpdatesDialog> {
                         final confirmed = await showDialog<bool>(
                           context: context,
                           builder: (ctx) => AlertDialog(
-                            title: const Text('Install update and restart?'),
+                            title: const Text('安裝更新並重新啟動？'),
                             content: const Text(
                               'Fixma Pixma will close and restart with the verified update. Finish all printer operations first. Your settings, history and reset guards will be preserved.',
                             ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(ctx, false),
-                                child: const Text('Cancel'),
+                                child: const Text('取消'),
                               ),
                               FilledButton(
                                 onPressed: () => Navigator.pop(ctx, true),
-                                child: const Text('Install and restart'),
+                                child: const Text('安裝並重新啟動'),
                               ),
                             ],
                           ),
@@ -236,14 +236,14 @@ class _UpdatesDialogState extends State<_UpdatesDialog> {
                     : null,
                 icon: const Icon(Icons.restart_alt, size: 16),
                 label: Text(
-                  u.installing ? 'Restarting...' : 'Install and restart',
+                  u.installing ? '重新啟動中…' : '安裝並重新啟動',
                 ),
               ),
             if (release != null)
               TextButton.icon(
                 onPressed: opening || u.installing ? null : open,
                 icon: const Icon(Icons.open_in_new, size: 16),
-                label: const Text('View release'),
+                label: const Text('查看發行版本'),
               ),
           ],
         ),

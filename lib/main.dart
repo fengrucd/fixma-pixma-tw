@@ -410,10 +410,10 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                         const SizedBox(width: 7),
                         Text(
                           c.busy
-                              ? 'Working…'
+                              ? '處理中…'
                               : c.networkOnline
-                              ? 'Connected · Local network'
-                              : 'USB and local network',
+                              ? '已連線・區域網路'
+                              : 'USB 與區域網路',
                           style: TextStyle(
                             fontSize: 12,
                             color: colors(context).muted,
@@ -454,12 +454,12 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
         child: Row(
           children: [
             for (final (i, label, icon) in [
-              (0, 'Overview', Icons.print_outlined),
-              (4, 'Queues', Icons.list_alt_outlined),
-              (3, 'Service report', Icons.description_outlined),
-              (1, 'Maintenance', Icons.build_outlined),
-              (2, 'History', Icons.history),
-              (6, 'Diagnostics', Icons.monitor_heart_outlined),
+              (0, '總覽', Icons.print_outlined),
+              (4, '列印佇列', Icons.list_alt_outlined),
+              (3, '維修報告', Icons.description_outlined),
+              (1, '維護', Icons.build_outlined),
+              (2, '歷史紀錄', Icons.history),
+              (6, '診斷', Icons.monitor_heart_outlined),
             ])
               Semantics(
                 button: true,
@@ -526,7 +526,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
             Container(width: 1, height: 20, color: p.line),
             const SizedBox(width: 18),
             Text(
-              'Printer diagnostics',
+              '印表機診斷',
               style: TextStyle(fontSize: 13, color: p.muted),
             ),
           ],
@@ -535,13 +535,13 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
             TextButton.icon(
               onPressed: c.busy ? null : () => export(context),
               icon: const Icon(Icons.file_download_outlined, size: 18),
-              label: const Text('Export report'),
+              label: const Text('匯出報告'),
             ),
           const SizedBox(width: 12),
           Container(height: 28, width: 1, color: p.line),
           const SizedBox(width: 12),
           IconButton(
-            tooltip: 'Check for updates',
+            tooltip: '檢查更新',
             onPressed: () => showSoftwareUpdates(context, updates),
             icon: Badge(
               isLabelVisible: updates.available != null,
@@ -549,18 +549,18 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
             ),
           ),
           PopupMenuButton<ThemeMode>(
-            tooltip: 'Appearance',
+            tooltip: '外觀',
             initialValue: c.themeMode,
             onSelected: c.setTheme,
             itemBuilder: (_) => [
               for (final (mode, label, icon) in [
                 (
                   ThemeMode.system,
-                  'Follow device',
+                  '跟隨系統',
                   Icons.brightness_auto_outlined,
                 ),
-                (ThemeMode.light, 'Light', Icons.light_mode_outlined),
-                (ThemeMode.dark, 'Dark', Icons.dark_mode_outlined),
+                (ThemeMode.light, '淺色', Icons.light_mode_outlined),
+                (ThemeMode.dark, '深色', Icons.dark_mode_outlined),
               ])
                 PopupMenuItem(
                   value: mode,
@@ -620,12 +620,12 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
           const SizedBox(width: 16),
           Expanded(
             child: Text(
-              c.progress.isEmpty ? 'Looking for your printer…' : c.progress,
+              c.progress.isEmpty ? '正在尋找印表機…' : c.progress,
             ),
           ),
           TextButton(
             onPressed: c.activePeer == null ? null : c.stop,
-            child: const Text('Stop waiting'),
+            child: const Text('停止等待'),
           ),
         ],
       ),
@@ -696,40 +696,40 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
     final p = colors(context), r = c.report;
     final service = c.devices.any((d) => d['service'] == true);
     final state = r?.sample == true
-        ? 'Sample report'
+        ? '範例報告'
         : service
-        ? 'Service mode detected'
+        ? '已偵測到維修模式'
         : c.devices.isNotEmpty
-        ? 'Normal mode detected'
-        : 'Waiting for USB';
+        ? '已偵測到一般模式'
+        : '等待 USB 連線';
     final device = Panel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionLabel('Device information'),
+          const SectionLabel('裝置資訊'),
           const SizedBox(height: 16),
           for (final (label, value) in [
             (
-              'Model',
+              '機型',
               r != null
                   ? 'Canon G7000 series${r.sample ? ' · sample' : ''}'
-                  : c.networkStatus?.model ?? 'Not identified',
+                  : c.networkStatus?.model ?? '尚未識別',
             ),
             (
-              'Service family',
-              r != null ? 'G7000 series' : 'Run diagnostics to identify',
+              '維修系列',
+              r != null ? 'G7000 series' : '執行診斷以識別',
             ),
-            ('Firmware', r?.firmware ?? 'Not read'),
-            ('Serial number', r?.serial ?? 'Not read'),
+            ('韌體', r?.firmware ?? '尚未讀取'),
+            ('序號', r?.serial ?? '尚未讀取'),
             (
-              'Connection',
+              '連線',
               r?.sample == true
-                  ? 'Sample data'
+                  ? '範例資料'
                   : service
-                  ? 'USB / Service mode'
+                  ? 'USB／維修模式'
                   : c.devices.isNotEmpty
-                  ? 'USB / Normal mode'
-                  : 'Not connected',
+                  ? 'USB／一般模式'
+                  : '尚未連線',
             ),
           ]) ...[
             Text(label, style: TextStyle(fontSize: 12, color: p.muted)),
@@ -745,7 +745,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
           TextButton.icon(
             onPressed: () => instructions(context),
             icon: const Icon(Icons.help_outline, size: 16),
-            label: const Text('Service mode guide'),
+            label: const Text('維修模式指南'),
           ),
         ],
       ),
@@ -755,22 +755,22 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SectionLabel('Service report'),
+                const SectionLabel('維修報告'),
                 const SizedBox(height: 22),
                 const Text(
-                  'No diagnostic report',
+                  '尚無診斷報告',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Put the printer in service mode, connect its USB cable, then run diagnostics to read the waste counter and usage records.',
+                  '將印表機切換至維修模式並連接 USB 線，再執行診斷以讀取廢墨計數器與使用紀錄。',
                   style: TextStyle(fontSize: 14, height: 1.6, color: p.muted),
                 ),
                 const SizedBox(height: 22),
                 OutlinedButton.icon(
                   onPressed: c.busy ? null : c.sample,
                   icon: const Icon(Icons.description_outlined, size: 17),
-                  label: const Text('Open sample report'),
+                  label: const Text('開啟範例報告'),
                 ),
               ],
             ),
@@ -784,7 +784,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                   padding: const EdgeInsets.fromLTRB(20, 13, 12, 13),
                   child: Row(
                     children: [
-                      const Expanded(child: SectionLabel('Service report')),
+                      const Expanded(child: SectionLabel('維修報告')),
                       Text(
                         'Captured ${date(r.capturedAt)}',
                         style: TextStyle(fontSize: 12, color: p.muted),
@@ -792,7 +792,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                       const SizedBox(width: 12),
                       TextButton(
                         onPressed: () => rawReport(context),
-                        child: const Text('View full report'),
+                        child: const Text('查看完整報告'),
                       ),
                     ],
                   ),
@@ -813,7 +813,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                         children: [
                           const Expanded(
                             child: Text(
-                              'Waste-ink counter',
+                              '廢墨計數器',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -841,7 +841,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'Firmware estimate of absorber use; not a physical ink measurement.',
+                        '韌體估算的廢墨吸收棉使用量，並非實際墨水測量值。',
                         style: TextStyle(fontSize: 12.5, color: p.muted),
                       ),
                     ],
@@ -852,23 +852,23 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SectionLabel('Usage records'),
+                      const SectionLabel('使用紀錄'),
                       const SizedBox(height: 8),
-                      detail(context, 'Printed pages', number(r.pages)),
-                      detail(context, 'Recorded copies', number(r.copies)),
+                      detail(context, '列印頁數', number(r.pages)),
+                      detail(context, '影印紀錄', number(r.copies)),
                       detail(
                         context,
-                        'Pages from front cassette',
+                        '前方紙匣進紙頁數',
                         number(r.frontPages),
                       ),
                       detail(
                         context,
-                        'Pages from rear feed',
+                        '後方進紙頁數',
                         number(r.rearPages),
                       ),
                       detail(
                         context,
-                        'Recorded counter resets',
+                        '計數器歸零紀錄',
                         r.resetCount?.toString() ?? ' - ',
                       ),
                     ],
@@ -879,7 +879,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SectionLabel('Stored error history'),
+                      const SectionLabel('已儲存的錯誤紀錄'),
                       const SizedBox(height: 10),
                       Wrap(
                         spacing: 8,
@@ -891,7 +891,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'Historical entries may remain after repair. These are not the current printer status.',
+                        '維修後可能仍保留歷史紀錄，並不代表目前的印表機狀態。',
                         style: TextStyle(
                           fontSize: 12.5,
                           height: 1.5,
@@ -909,8 +909,8 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
       children: [
         pageTitle(
           context,
-          'G7020 service diagnostics',
-          'Read the G7000 USB service profile. Network status is available on Overview.',
+          'G7020 維修診斷',
+          '讀取 G7000 USB 維修資訊。網路狀態請見總覽。',
         ),
         Panel(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -935,13 +935,13 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
               OutlinedButton.icon(
                 onPressed: c.busy ? null : () => findServicePrinter(context),
                 icon: const Icon(Icons.refresh, size: 17),
-                label: const Text('Find printer'),
+                label: const Text('尋找印表機'),
               ),
               const SizedBox(width: 10),
               FilledButton.icon(
                 onPressed: c.busy ? null : () => diagnosePrinter(context),
                 icon: const Icon(Icons.manage_search, size: 18),
-                label: const Text('Run diagnostics'),
+                label: const Text('執行診斷'),
               ),
             ],
           ),
@@ -1037,8 +1037,8 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
       children: [
         pageTitle(
           context,
-          'Printer maintenance',
-          'Check print quality, clean the printhead, and adjust Canon settings.',
+          '印表機維護',
+          '檢查列印品質、清潔噴頭及調整 Canon 設定。',
         ),
         CanonMaintenancePanel(controller: c),
         const SizedBox(height: 24),
@@ -1048,11 +1048,11 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
             color: Colors.transparent,
             child: ExpansionTile(
               title: const Text(
-                'Waste-ink absorber',
+                '廢墨吸收棉',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               subtitle: const Text(
-                'Experimental reset · USB + service mode required · No Wi-Fi reset',
+                '實驗性歸零・需要 USB 與維修模式・不支援 Wi-Fi 歸零',
                 style: TextStyle(fontSize: 13),
               ),
               childrenPadding: const EdgeInsets.all(20),
@@ -1071,14 +1071,14 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
       children: [
         pageTitle(
           context,
-          'Waste-counter reset',
-          'USB + manual service mode required. Waste-counter reset over Wi-Fi is not supported.',
+          '廢墨計數器歸零',
+          '需要 USB 並手動進入維修模式。不支援透過 Wi-Fi 將廢墨計數器歸零。',
         ),
         Panel(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const BadgeLabel('Experimental reset', warning: true),
+              const BadgeLabel('實驗性歸零', warning: true),
               const SizedBox(height: 10),
               Text(
                 experimentalWasteResetNotice,
@@ -1094,13 +1094,13 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
             children: [
               maintenanceSection(
                 context,
-                '1. Read the printer',
-                'Requires a USB connection in service mode.',
+                '1. 讀取印表機',
+                '需要維修模式下的 USB 連線。',
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Run a fresh diagnostic to verify the model, firmware, and current counter.',
+                      '重新執行診斷，確認機型、韌體與目前計數值。',
                       style: TextStyle(
                         color: p.muted,
                         fontSize: 14,
@@ -1117,11 +1117,11 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                               ? null
                               : () => diagnosePrinter(context),
                           icon: const Icon(Icons.manage_search, size: 18),
-                          label: const Text('Run diagnostics'),
+                          label: const Text('執行診斷'),
                         ),
                         TextButton(
                           onPressed: () => instructions(context),
-                          child: const Text('Enter service mode'),
+                          child: const Text('進入維修模式'),
                         ),
                       ],
                     ),
@@ -1131,15 +1131,15 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
               Divider(height: 1, color: p.line),
               maintenanceSection(
                 context,
-                '2. Reset the counter',
-                'The counter is a software estimate of absorber use.',
+                '2. 計數器歸零',
+                '計數器是軟體估算的吸收棉使用量。',
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         const Text(
-                          'Waste-ink absorber',
+                          '廢墨吸收棉',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -1169,7 +1169,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                           : (v) => c.setServiced(v ?? false),
                       controlAffinity: ListTileControlAffinity.leading,
                       title: const Text(
-                        'The ink absorber has been serviced.',
+                        '廢墨吸收棉已完成維護。',
                         style: TextStyle(fontSize: 14),
                       ),
                     ),
@@ -1179,11 +1179,11 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                           ? null
                           : () => confirmReset(context),
                       icon: const Icon(Icons.restart_alt, size: 18),
-                      label: const Text('Reset waste counter'),
+                      label: const Text('廢墨計數器歸零'),
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      c.resetBlocked ?? 'Ready for one reset attempt. The attempt is recorded before sending the command.',
+                      c.resetBlocked ?? '已準備好執行一次歸零。傳送指令前會先記錄此次操作。',
                       style: TextStyle(
                         color: p.muted,
                         fontSize: 13,
@@ -1196,13 +1196,13 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
               Divider(height: 1, color: p.line),
               maintenanceSection(
                 context,
-                '3. Verify after restart',
-                'Complete this step at the printer.',
+                '3. 重新開機後驗證',
+                '請在印表機上完成此步驟。',
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'After an acknowledged reset, shut down with Power and start normally. Confirm the display is clear and try a normal print.',
+                      '確認歸零指令已獲回應後，使用電源鍵關機，再正常開機。確認螢幕無錯誤並嘗試一般列印。',
                       style: TextStyle(
                         color: p.muted,
                         fontSize: 14,
@@ -1217,7 +1217,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                             controller: ipInput,
                             onChanged: (v) => c.ip = v,
                             decoration: const InputDecoration(
-                              labelText: 'Printer IP address (optional)',
+                              labelText: '印表機 IP 位址（選填）',
                               hintText: '192.168.1.50',
                               prefixIcon: Icon(Icons.lan_outlined, size: 18),
                               isDense: true,
@@ -1231,12 +1231,12 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                               ? null
                               : () => printerAction(
                                   context,
-                                  title: 'Could not check printer status',
+                                  title: '無法檢查印表機狀態',
                                   action: () => c.verify(ipInput.text),
                                   error: () => c.lastError,
                                   help: networkRequirement,
                                 ),
-                          child: const Text('Check status'),
+                          child: const Text('檢查狀態'),
                         ),
                       ],
                     ),
@@ -1257,8 +1257,8 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
       children: [
         pageTitle(
           context,
-          'Service history',
-          'Diagnostics and reset attempts are saved on this computer.',
+          '維修歷史',
+          '診斷及歸零操作紀錄儲存在此電腦。',
         ),
         if (c.repairs.isNotEmpty)
           Padding(
@@ -1284,7 +1284,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                         Icon(Icons.history_rounded, size: 36, color: p.accent),
                         const SizedBox(height: 18),
                         const Text(
-                          'No saved reports',
+                          '尚無儲存的報告',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
@@ -1292,7 +1292,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'Run a diagnostic to save your first report.',
+                          '執行診斷以儲存第一份報告。',
                           style: TextStyle(color: p.muted),
                         ),
                       ],
@@ -1314,19 +1314,19 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                         ),
                         title: Text(
                           entry['kind'] == 'reset'
-                              ? 'Counter reset'
+                              ? '計數器歸零'
                               : entry['kind'] == 'diagnostic'
-                              ? 'Diagnostic report'
+                              ? '診斷報告'
                               : entry['kind'] == 'ink refill reset'
-                              ? 'Ink refill reset'
+                              ? '補墨計數器重設'
                               : entry['kind'] == 'network snapshot'
-                              ? 'Printer status snapshot'
+                              ? '印表機狀態快照'
                               : entry['kind'] == 'connection checks'
-                              ? 'Connection checks'
+                              ? '連線檢查'
                               : entry['kind'] == 'repair verification'
-                              ? 'Repair verification'
+                              ? '維修驗證'
                               : entry['kind'] == 'restart check'
-                              ? 'Restart status check'
+                              ? '重新開機狀態檢查'
                               : entry['kind'] as String,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
@@ -1347,12 +1347,12 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                         onTap: () => showDialog<void>(
                           context: context,
                           builder: (ctx) => AlertDialog(
-                            title: const Text('Service record'),
+                            title: const Text('維修紀錄'),
                             content: SizedBox(
                               width: 600,
                               child: SingleChildScrollView(
                                 child: SelectableText(
-                                  '${entry['kind']} · ${entry['status']}\n\n${entry['error'] ?? 'Operation completed.'}\n${entry['beforeCounter'] != null ? 'Before: ${entry['beforeCounter']}%\nAfter: ${entry['afterCounter'] ?? 'Unverified'}%' : ''}${entry['kind'] == 'ink refill reset' ? '\nSelected: ${(entry['selectedColors'] as List?)?.join(', ') ?? 'Not recorded'}\nBefore: ${(entry['before'] as Map?)?['levels'] ?? 'Not read'}\nAfter: ${(entry['after'] as Map?)?['levels'] ?? 'Not verified'}\nReadback verified: ${entry['verified'] == true ? 'Yes' : 'No'}' : ''}\n\n${entry['network'] != null ? const JsonEncoder.withIndent('  ').convert(entry['network']) : (entry['report'] as Map?)?['raw'] ?? 'The detailed exchange is retained in the local history file.'}',
+                                  '${entry['kind']} · ${entry['status']}\n\n${entry['error'] ?? 'Operation completed.'}\n${entry['beforeCounter'] != null ? 'Before: ${entry['beforeCounter']}%\nAfter: ${entry['afterCounter'] ?? 'Unverified'}%' : ''}${entry['kind'] == 'ink refill reset' ? '\nSelected: ${(entry['selectedColors'] as List?)?.join(', ') ?? 'Not recorded'}\nBefore: ${(entry['before'] as Map?)?['levels'] ?? '尚未讀取'}\nAfter: ${(entry['after'] as Map?)?['levels'] ?? 'Not verified'}\nReadback verified: ${entry['verified'] == true ? 'Yes' : 'No'}' : ''}\n\n${entry['network'] != null ? const JsonEncoder.withIndent('  ').convert(entry['network']) : (entry['report'] as Map?)?['raw'] ?? 'The detailed exchange is retained in the local history file.'}',
                                   style: const TextStyle(
                                     fontFamily: 'Consolas',
                                     fontSize: 12,
@@ -1364,7 +1364,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(ctx),
-                                child: const Text('Close'),
+                                child: const Text('關閉'),
                               ),
                             ],
                           ),
@@ -1389,7 +1389,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
         await File(path).writeAsString(c.exportText(), flush: true);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Service report saved.')),
+            const SnackBar(content: Text('維修報告已儲存。')),
           );
         }
       }
@@ -1413,7 +1413,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
     if (confirmed == true && context.mounted) {
       await printerAction(
         context,
-        title: 'Waste-counter reset did not complete',
+        title: '廢墨計數器歸零未完成',
         action: c.reset,
         error: () => c.lastError,
         help: usbServiceRequirement,
@@ -1425,7 +1425,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
   Future<void> diagnosePrinter(BuildContext context) async {
     await printerAction(
       context,
-      title: 'USB service diagnostics failed',
+      title: 'USB 維修診斷失敗',
       action: c.diagnose,
       error: () => c.lastError,
       help: usbServiceRequirement,
@@ -1435,7 +1435,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
   Future<void> findServicePrinter(BuildContext context) async {
     await printerAction(
       context,
-      title: 'USB service printer not available',
+      title: '找不到 USB 維修模式印表機',
       action: c.discover,
       error: () => c.usbError.isNotEmpty
           ? c.usbError
@@ -1451,19 +1451,19 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
   Future<void> instructions(BuildContext context) => showDialog<void>(
     context: context,
     builder: (ctx) => AlertDialog(
-      title: const Text('Enter service mode'),
+      title: const Text('進入維修模式'),
       scrollable: true,
       content: const SizedBox(
         width: 440,
         child: Text(
-          'For the verified PIXMA G7020 procedure:\n\n1. Connect a USB data cable. Turn the printer off with Power and wait until shutdown finishes and the power light goes out. Leave the power cord connected.\n2. Press and hold Power.\n3. While holding Power, press and release Stop six times.\n4. Release Power. Wait for the mechanism to settle and the green power LED to stay on steadily. The LCD should be blank or black.\n5. Find the service printer and run diagnostics to confirm the USB service connection. A steady LED alone does not prove service mode.\n\nThese steps were tested on the G7020, firmware 1.050. Do not assume they apply to other models. After the operation finishes, turn off with Power, wait for shutdown, then turn on normally. The diagnostic reads a report over USB; it does not request a printed page.',
+          '已驗證的 PIXMA G7020 操作程序：\n\n1. 連接 USB 資料線。使用電源鍵關機，等待關機完成且電源燈熄滅。保持電源線連接。\n2. 按住電源鍵。\n3. 按住電源鍵時，按下並放開 Stop 鍵六次。\n4. 放開電源鍵。等待機構停止且綠色電源燈恆亮。LCD 應為空白或黑色。\n5. 尋找維修模式印表機並執行診斷，確認 USB 維修連線。僅電源燈恆亮不能證明已進入維修模式。\n\n此程序已在 G7020 韌體 1.050 測試，請勿假設其他機型適用。操作完成後使用電源鍵關機，等待關機完成再正常開機。診斷透過 USB 讀取報告，不會要求列印。',
           style: TextStyle(height: 1.8),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx),
-          child: const Text('Done'),
+          child: const Text('完成'),
         ),
       ],
     ),
@@ -1472,7 +1472,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
     context: context,
     builder: (ctx) => AlertDialog(
       title: Text(
-        c.report!.sample ? 'Sample service report' : 'Service report',
+        c.report!.sample ? 'Sample service report' : '維修報告',
       ),
       content: SizedBox(
         width: 660,
@@ -1491,7 +1491,7 @@ class _FixmaPixmaState extends State<FixmaPixma> with WidgetsBindingObserver {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx),
-          child: const Text('Close'),
+          child: const Text('關閉'),
         ),
       ],
     ),

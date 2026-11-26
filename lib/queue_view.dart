@@ -19,7 +19,7 @@ class QueueView extends StatelessWidget {
           children: [
             const Expanded(
               child: Text(
-                'Print queues',
+                '列印佇列',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
               ),
             ),
@@ -28,7 +28,7 @@ class QueueView extends StatelessWidget {
                   ? null
                   : () => printerAction(
                       context,
-                      title: 'Could not read print queues',
+                      title: '無法讀取列印佇列',
                       action: c.refreshQueues,
                       error: () => [
                         c.lastError,
@@ -38,7 +38,7 @@ class QueueView extends StatelessWidget {
                       help: 'Printer-side jobs require a selected network printer in normal mode. Windows queues are read from this PC; check the installed queue and Windows Print Spooler if that source failed.',
                     ),
               icon: const Icon(Icons.refresh, size: 17),
-              label: const Text('Refresh queues'),
+              label: const Text('更新佇列'),
             ),
           ],
         ),
@@ -67,8 +67,8 @@ class QueueView extends StatelessWidget {
           runSpacing: 8,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            SectionLabel('At the printer'),
-            BadgeLabel('Experimental cancellation', warning: true),
+            SectionLabel('印表機端'),
+            BadgeLabel('實驗性取消功能', warning: true),
           ],
         ),
         const SizedBox(height: 8),
@@ -84,7 +84,7 @@ class QueueView extends StatelessWidget {
           'Read the printer queue to see jobs it has received.',
         ),
         const SizedBox(height: 24),
-        const SectionLabel('On this Windows PC'),
+        const SectionLabel('此 Windows 電腦'),
         const SizedBox(height: 10),
         Panel(
           child: Column(
@@ -97,12 +97,12 @@ class QueueView extends StatelessWidget {
                 initialValue: c.selectedQueue?.identity ?? '',
                 isExpanded: true,
                 decoration: const InputDecoration(
-                  labelText: 'Windows printer queue',
+                  labelText: 'Windows 印表機佇列',
                 ),
                 items: [
                   const DropdownMenuItem(
                     value: '',
-                    child: Text('Choose a Windows queue'),
+                    child: Text('選擇 Windows 佇列'),
                   ),
                   for (final q in c.localQueues)
                     DropdownMenuItem(
@@ -114,7 +114,7 @@ class QueueView extends StatelessWidget {
                     ? null
                     : (value) => printerAction(
                         context,
-                        title: 'Could not read the Windows queue',
+                        title: '無法讀取 Windows 佇列',
                         action: () => c.chooseQueue(
                           c.localQueues
                               .where((q) => q.identity == value)
@@ -184,7 +184,7 @@ class QueueView extends StatelessWidget {
                     children: [
                       Text(
                         snapshot.label.isEmpty
-                            ? 'Printer queue'
+                            ? '印表機佇列'
                             : snapshot.label,
                         style: const TextStyle(
                           fontSize: 17,
@@ -204,7 +204,7 @@ class QueueView extends StatelessWidget {
                     onPressed: c.busy || c.networkRefreshing
                         ? null
                         : () => _confirm(context, snapshot, eligible),
-                    child: const Text('Cancel listed jobs'),
+                    child: const Text('取消列出的工作'),
                   ),
               ],
             ),
@@ -213,7 +213,7 @@ class QueueView extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 20),
               child: Text(
-                'No queued jobs reported.',
+                '未回報等待中的列印工作。',
                 style: TextStyle(color: p.muted),
               ),
             ),
@@ -230,7 +230,7 @@ class QueueView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          job.title.isEmpty ? 'Untitled job' : job.title,
+                          job.title.isEmpty ? '未命名工作' : job.title,
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 4),
@@ -255,7 +255,7 @@ class QueueView extends StatelessWidget {
                             )
                         ? () => _confirm(context, snapshot, [job])
                         : null,
-                    child: const Text('Cancel job'),
+                    child: const Text('取消工作'),
                   ),
                 ],
               ),
@@ -293,7 +293,7 @@ class QueueView extends StatelessWidget {
         builder: (context, setState) => AlertDialog(
           title: Text(
             jobs.length == 1
-                ? 'Cancel this job?'
+                ? '取消此工作？'
                 : 'Cancel ${jobs.length} listed jobs?',
           ),
           content: SizedBox(
@@ -305,12 +305,12 @@ class QueueView extends StatelessWidget {
                 children: [
                   if (experimental) ...[
                     const BadgeLabel(
-                      'Experimental cancellation',
+                      '實驗性取消功能',
                       warning: true,
                     ),
                     const SizedBox(height: 12),
                     const Text(
-                      'Canceling a job already processing inside the printer has not been verified on hardware. Cancellation can fail or take time to take effect.',
+                      '尚未在實體硬體驗證取消印表機內部正在處理的工作。取消可能失敗或需要時間生效。',
                     ),
                     const SizedBox(height: 12),
                   ],
@@ -326,7 +326,7 @@ class QueueView extends StatelessWidget {
                     ),
                   const SizedBox(height: 10),
                   const Text(
-                    'Only these jobs will be requested for cancellation. Pages already printed cannot be recalled.',
+                    '僅會要求取消這些工作，已列印的頁面無法收回。',
                   ),
                   if (experimental)
                     CheckboxListTile(
@@ -336,7 +336,7 @@ class QueueView extends StatelessWidget {
                       onChanged: (value) =>
                           setState(() => acceptedExperimental = value ?? false),
                       title: const Text(
-                        'I understand printer-side cancellation is experimental.',
+                        '我了解印表機端取消功能屬於實驗性質。',
                       ),
                     ),
                 ],
@@ -346,13 +346,13 @@ class QueueView extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Keep jobs'),
+              child: const Text('保留工作'),
             ),
             FilledButton(
               onPressed: !experimental || acceptedExperimental
                   ? () => Navigator.pop(context, true)
                   : null,
-              child: const Text('Cancel jobs'),
+              child: const Text('取消工作'),
             ),
           ],
         ),
@@ -361,7 +361,7 @@ class QueueView extends StatelessWidget {
     if (yes == true && context.mounted) {
       await printerAction(
         context,
-        title: 'Queue cancellation did not complete',
+        title: '佇列取消操作未完成',
         action: () => controller.cancelJobs(snapshot, jobs, confirmed: true),
         error: () => controller.lastError,
         help: 'Refresh the same queue and check which jobs are still listed. Check its network connection or Windows spooler before making another selection.',

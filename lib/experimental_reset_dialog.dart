@@ -5,10 +5,10 @@ import 'theme.dart';
 import 'action_feedback.dart';
 
 const experimentalWasteResetNotice =
-    'A nonzero waste-counter clear through this app has not been verified on hardware. The original protocol reset succeeded; app diagnostics and reset safeguards were tested.';
+    '尚未在實體硬體上驗證透過本程式將非零廢墨計數器歸零。原始協定的歸零操作曾成功，程式診斷及歸零安全措施已測試。';
 
 const wasteInkSpillWarning =
-    'Resetting the counter does not empty or repair the waste-ink pads. If the pads are saturated, blocked or full of ink, replace them before resetting the counter or running Ink Flush on the printer. Ink Flush and cleaning send more waste ink into the absorber. Continuing with full or blocked pads can make ink spill out of the printer. This app resets the waste counter; it does not run Ink Flush.';
+    '計數器歸零不會清空或修復廢墨吸收棉。如果吸收棉飽和、阻塞或充滿墨水，請先更換，再執行歸零或印表機的墨水沖洗（Ink Flush）。沖洗與清潔會將更多廢墨排入吸收棉。吸收棉已滿或阻塞時繼續操作可能導致墨水溢出。本程式僅重設廢墨計數器，不會執行墨水沖洗。';
 
 class ExperimentalResetDialog extends StatefulWidget {
   final String serial;
@@ -30,7 +30,7 @@ class _ExperimentalResetDialogState extends State<ExperimentalResetDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Reset this printer’s counter?'),
+    title: const Text('要將此印表機的計數器歸零嗎？'),
     content: SizedBox(
       width: 420,
       child: SingleChildScrollView(
@@ -41,7 +41,7 @@ class _ExperimentalResetDialogState extends State<ExperimentalResetDialog> {
             const Text(usbServiceRequirement, style: TextStyle(height: 1.5)),
             const SizedBox(height: 16),
             Text(
-              'Ink spill warning',
+              '墨水溢出警告',
               style: TextStyle(
                 color: colors(context).warning,
                 fontWeight: FontWeight.w600,
@@ -50,7 +50,7 @@ class _ExperimentalResetDialogState extends State<ExperimentalResetDialog> {
             const SizedBox(height: 8),
             const Text(wasteInkSpillWarning, style: TextStyle(height: 1.5)),
             const SizedBox(height: 16),
-            const BadgeLabel('Experimental reset', warning: true),
+            const BadgeLabel('實驗性歸零', warning: true),
             const SizedBox(height: 12),
             Text(
               experimentalWasteResetNotice,
@@ -69,7 +69,7 @@ class _ExperimentalResetDialogState extends State<ExperimentalResetDialog> {
               onChanged: (value) =>
                   setState(() => spillAccepted = value ?? false),
               title: const Text(
-                'I understand that full or blocked pads can spill ink.',
+                '我了解吸收棉飽和或阻塞可能導致墨水溢出。',
               ),
             ),
             CheckboxListTile(
@@ -77,7 +77,7 @@ class _ExperimentalResetDialogState extends State<ExperimentalResetDialog> {
               controlAffinity: ListTileControlAffinity.leading,
               value: accepted,
               onChanged: (value) => setState(() => accepted = value ?? false),
-              title: const Text('I understand this reset is experimental.'),
+              title: const Text('我了解此歸零功能屬於實驗性質。'),
             ),
           ],
         ),
@@ -86,13 +86,13 @@ class _ExperimentalResetDialogState extends State<ExperimentalResetDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.pop(context, false),
-        child: const Text('Cancel'),
+        child: const Text('取消'),
       ),
       FilledButton(
         onPressed: accepted && spillAccepted
             ? () => Navigator.pop(context, true)
             : null,
-        child: const Text('Reset counter'),
+        child: const Text('計數器歸零'),
       ),
     ],
   );

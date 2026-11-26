@@ -143,7 +143,7 @@ class _ProblemReportDialogState extends State<_ProblemReportDialog> {
     actions: [
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
-        child: const Text('Close'),
+        child: const Text('關閉'),
       ),
       FilledButton.icon(
         onPressed: opening ? null : open,
